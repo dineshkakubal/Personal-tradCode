@@ -2,11 +2,12 @@ from kiteconnect import WebSocket
 import numpy as np
 
 # Initialise.
+#kws = WebSocket("your_api_key", "your_public_token", "logged_in_user_id")
 kws = WebSocket("lzxojcmp16le5ep8", "c0b8c02577a6ec00dd3ddb622aa71c60", "DD1846")
 
 # Callback for tick reception.
 def on_tick(tick, ws):
-        print tick#["last_price"]
+        print tick
 	#print type(tick)
 	#print tick.split()[1]
 	#print xx[0].split()
