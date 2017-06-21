@@ -1,0 +1,2 @@
+kiteconnect==3.4.1
+PyDbLite==3.0.4
