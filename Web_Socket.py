@@ -3,7 +3,7 @@ import numpy as np
 
 # Initialise.
 #kws = WebSocket("your_api_key", "your_public_token", "logged_in_user_id")
-kws = WebSocket("lzxojcmp16le5ep8", "c0b8c02577a6ec00dd3ddb622aa71c60", "DD1846")
+kws = WebSocket("", "", "")
 
 # Callback for tick reception.
 def on_tick(tick, ws):
