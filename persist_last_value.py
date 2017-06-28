@@ -8,21 +8,21 @@ class PersistLastValue:
 		if self.persist_db.exists():
 			self.persist_db.open()
 			if len(self.persist_db) < 1:
-				self.persist_db.insert(previous_upperband=0, previous_lowerband=0)
+				self.persist_db.insert(previous_hiband=0, previous_loband=0)
 				self.persist_db.commit()
 		else:
-			self.persist_db.create("previous_upperband", "previous_lowerband")
-			self.persist_db.insert(previous_upperband=0, previous_lowerband=0)
+			self.persist_db.create("previous_hiband", "previous_loband")
+			self.persist_db.insert(previous_hiband=0, previous_loband=0)
 			self.persist_db.commit()
 
-	def persist_value(self, previous_upperband=0, previous_lowerband=0):
-		if previous_lowerband != 0:
+	def persist_value(self, previous_hiband=0, previous_loband=0):
+		if previous_loband != 0:
 			record = self.persist_db[0]
-			record['previous_lowerband'] = previous_lowerband
+			record['previous_lowband'] = previous_loband
 			self.persist_db.update(record, __id__=0)
-		if previous_upperband != 0:
+		if previous_hiband != 0:
 			record = self.persist_db[0]
-			record['previous_upperband'] = previous_upperband
+			record['previous_hiband'] = previous_hiband
 			self.persist_db.update(record, __id__=0)
 
 		self.persist_db.commit()

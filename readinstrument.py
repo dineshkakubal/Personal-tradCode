@@ -49,14 +49,14 @@ if INITIAL_HIBAND < PREVIOUS_HIBAND < last_price_list[-2]:
 else:
 	HIBAND = PREVIOUS_HIBAND
 
-pv.persist_value(previous_upperband=HIBAND)
+pv.persist_value(previous_hiband=HIBAND)
 
 if INITIAL_LOBAND > PREVIOUS_LOBAND > last_price_list[-2]:
 	LOBAND = INITIAL_LOBAND
 else:
 	LOBAND = PREVIOUS_LOBAND
 
-pv.persist_value(previous_lowerband=LOBAND)
+pv.persist_value(previous_loband=LOBAND)
 
 if last_price_list[-1] < LOBAND:
 	SELL_SIGNAL = True
