@@ -36,43 +36,43 @@ MULTIPLIER = 10
 tr_list = [abs(x - last_price_list[i - 1]) for i, x in enumerate(last_price_list)][1:]
 ATR = sum(i for i in tr_list) / len(tr_list)
 
-INITIAL_UPPERBAND = (high_value + low_value) / 2 + MULTIPLIER * ATR
-INITIAL_LOWERBAND = (high_value + low_value) / 2 - MULTIPLIER * ATR
+INITIAL_HIBAND = (high_value + low_value) / 2 + MULTIPLIER * ATR
+INITIAL_LOBAND = (high_value + low_value) / 2 - MULTIPLIER * ATR
 
-PREVIOUS_FINAL_UPPERBAND = pv.get_persisted_value()['previous_upperband']
+PREVIOUS_HIBAND = pv.get_persisted_value()['previous_upperband']
 
-PREVIOUS_FINAL_LOWERBAND = pv.get_persisted_value()['previous_lowerband']
+PREVIOUS_LOBAND = pv.get_persisted_value()['previous_lowerband']
 
 
-if INITIAL_UPPERBAND < PREVIOUS_FINAL_UPPERBAND < last_price_list[-2]:
-	FINAL_UPPERBAND = INITIAL_UPPERBAND
+if INITIAL_HIBAND < PREVIOUS_HIBAND < last_price_list[-2]:
+	HIBAND = INITIAL_HIBAND
 else:
-	FINAL_UPPERBAND = PREVIOUS_FINAL_UPPERBAND
+	HIBAND = PREVIOUS_HIBAND
 
-pv.persist_value(previous_upperband=FINAL_UPPERBAND)
+pv.persist_value(previous_upperband=HIBAND)
 
-if INITIAL_LOWERBAND > PREVIOUS_FINAL_LOWERBAND > last_price_list[-2]:
-	FINAL_LOWERBAND = INITIAL_LOWERBAND
+if INITIAL_LOBAND > PREVIOUS_LOBAND > last_price_list[-2]:
+	LOBAND = INITIAL_LOBAND
 else:
-	FINAL_LOWERBAND = PREVIOUS_FINAL_LOWERBAND
+	LOBAND = PREVIOUS_LOBAND
 
-pv.persist_value(previous_lowerband=FINAL_LOWERBAND)
+pv.persist_value(previous_lowerband=LOBAND)
 
-if last_price_list[-1] < FINAL_LOWERBAND:
+if last_price_list[-1] < LOBAND:
 	SELL_SIGNAL = True
 	print "SELL"
 
-if last_price_list[-1] > FINAL_UPPERBAND:
+if last_price_list[-1] > HIBAND:
 	BUY_SIGNAL = True
 	print "BUY"
 
 print pv.get_persisted_value()
 print "Last" + str(last_price_list[-1])
 print "Last but 1" + str(last_price_list[-2])
-print FINAL_UPPERBAND
-print FINAL_LOWERBAND
-print INITIAL_LOWERBAND
-print INITIAL_UPPERBAND
+print HIBAND
+print LOBAND
+print INITIAL_LOBAND
+print INITIAL_HIBAND
 
 '''
 if ((current INI_HI_BAND < previous HI_BAND < previous close))
