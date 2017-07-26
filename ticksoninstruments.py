@@ -8,7 +8,7 @@ from pydblite.pydblite import Base
 
 from constants import db_name
 from constants import instruments
-from readinstrument import Trade
+from readinstrument import MyTrade
 
 api_key = os.getenv("API_KEY")
 token = os.getenv("PUB_TOKEN")
@@ -36,7 +36,7 @@ def on_tick(tick, ws):
                   tradeable=each_instrument_tick['tradeable'])
         db.commit()
         now = datetime.datetime.now()
-        trade = Trade(each_instrument_tick['last_price'], hour=now.hour, min=now.minute)
+        trade = MyTrade(each_instrument_tick['last_price'], hour=now.hour, min=now.minute)
         trade.super_trend_decision()
 
 
