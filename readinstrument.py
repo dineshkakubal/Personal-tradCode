@@ -67,8 +67,6 @@ class MyTrade:
         else:
             self.current_low_band = self.previous_low_band
 
-        print self.current_low_band
-        print self.current_high_band
         self.pv.persist_value(previous_hiband=self.current_high_band, previous_loband=self.current_low_band)
 
         if self.current_close < self.current_low_band:
