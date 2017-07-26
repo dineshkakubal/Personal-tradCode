@@ -8,7 +8,7 @@ from pydblite.pydblite import Base
 
 from constants import db_name
 from constants import instruments
-from trading import Trade
+from readinstrument import Trade
 
 api_key = os.getenv("API_KEY")
 token = os.getenv("PUB_TOKEN")

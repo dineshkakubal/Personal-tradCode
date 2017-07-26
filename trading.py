@@ -57,8 +57,10 @@ class Trade:
             self.buy_flag = False
             self.sell_flag = False
 
+    @staticmethod
     def sell_instrument(self):
         print "SELL"
 
+    @staticmethod
     def buy_instrument(self):
         print "BUY"
