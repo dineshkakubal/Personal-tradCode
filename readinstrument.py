@@ -22,8 +22,6 @@ class Trade:
         self.previous_low_band = 0
         self.hour = hour
         self.min = min
-        self.buy_flag = False
-        self.sell_flag = False
         self.multiplier = 10
         self.close_price_list = list()
         self.pv = PersistLastValue()
@@ -78,11 +76,9 @@ class Trade:
         self.pv.persist_value(previous_hiband=self.current_high_band, previous_loband=self.current_low_band)
 
         if self.current_close < self.current_low_band:
-            self.buy_flag = True
             self.sell_instrument()
 
         if self.current_close > self.current_high_band:
-            self.buy_flag = True
             self.buy_instrument()
 
     @staticmethod
