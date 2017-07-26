@@ -2,16 +2,9 @@ import time
 from persist_last_value import PersistLastValue
 from pydblite.pydblite import Base
 from constants import db_name
-# for i in range(1, 50):
-# 	db.insert(time=int(time.time()),
-# 			  instrument_token=784129,
-# 			  last_price=round(random.uniform(234.1, 238.5), 2),
-# 			  mode='ltp',
-# 			  tradeable=True)
-# 	db.commit()
 
 
-class Trade:
+class MyTrade:
     def __init__(self, current_close_price, hour, min, fac=1, c_min=5):
         self.current_close = current_close_price
         self.fac = fac
@@ -32,8 +25,9 @@ class Trade:
             raise Exception("Nothing to read")
         self.db.open()
         for record in self.db:
-            if (int(time.time()) - record['time']) < 50*6000:
+            if (int(time.time()) - record['time']) < 5*6000:
                 self.close_price_list.append(record['last_price'])
+        self.close_price_list.append(self.current_close)
 
     def compute_atr(self):
         tr_list = [abs(x - self.close_price_list[i - 1]) for i, x in enumerate(self.close_price_list)][1:]
@@ -46,18 +40,14 @@ class Trade:
         self.current_low_band = (max(self.close_price_list) + min(self.close_price_list)) / 2 - self.multiplier * self.compute_atr()
 
     def compute_previous_high_band(self):
+        self.previous_high_band = self.pv.get_persisted_value()['previous_hiband']
         if not self.previous_high_band:
-            phb = self.current_close + (self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
-        else:
-            phb = self.pv.get_persisted_value()['previous_upperband']
-        self.previous_high_band = phb
+            self.previous_high_band = self.current_close + (self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
 
     def compute_previous_low_band(self):
+        self.previous_low_band = self.pv.get_persisted_value()['previous_loband']
         if not self.previous_low_band:
-            plb = self.current_close - (self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
-        else:
-            plb = self.pv.get_persisted_value()['previous_lowerband']
-        self.previous_low_band = plb
+            self.previous_low_band = self.current_close - (self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
 
     def super_trend_decision(self):
         self.get_all_close_price_list()
@@ -67,12 +57,18 @@ class Trade:
         self.compute_current_high_band()
 
         previous_close = self.close_price_list[-2]
-        if not self.current_high_band < self.previous_high_band < previous_close:
+        if self.current_high_band < self.previous_high_band < previous_close:
+            self.current_high_band = self.current_high_band
+        else:
             self.current_high_band = self.previous_high_band
 
-        if not self.current_low_band > self.previous_low_band > previous_close:
+        if self.current_low_band > self.previous_low_band > previous_close:
+            self.current_low_band = self.current_low_band
+        else:
             self.current_low_band = self.previous_low_band
 
+        print self.current_low_band
+        print self.current_high_band
         self.pv.persist_value(previous_hiband=self.current_high_band, previous_loband=self.current_low_band)
 
         if self.current_close < self.current_low_band:
@@ -90,3 +86,23 @@ class Trade:
         print "BUY"
 
 
+if __name__ == "__main__":
+    # import random
+    # db = Base(db_name, sqlite_compat=True)
+    # if not db.exists():
+    #     raise Exception("Nothing to read")
+    # db.open()
+    # for i in range(1, 50):
+    #     db.insert(time=int(time.time()),
+    #               instrument_token=784129,
+    #               last_price=round(random.uniform(234.1, 238.5), 2),
+    #               mode='ltp',
+    #               tradeable=True)
+    #     db.commit()
+    #
+    # for record in db:
+    #     if (int(time.time()) - record['time']) < 50*6000:
+    #         print record['last_price']
+    #
+    trade = MyTrade(220.13, 10, 15)
+    trade.super_trend_decision()

@@ -19,7 +19,7 @@ class PersistLastValue:
     def persist_value(self, previous_hiband=0, previous_loband=0):
         if previous_loband != 0:
             record = self.persist_db[0]
-            record['previous_lowband'] = previous_loband
+            record['previous_loband'] = previous_loband
             self.persist_db.update(record, __id__=0)
         if previous_hiband != 0:
             record = self.persist_db[0]
@@ -33,9 +33,10 @@ class PersistLastValue:
 
     def reset_persist_db(self):
         self.persist_db.delete(self.persist_db)
+        self.persist_db.commit()
 
 
 if __name__ == "__main__":
     pv = PersistLastValue()
-    # pv.reset_persist_db()
+    #pv.reset_persist_db()
     print pv.get_persisted_value()
