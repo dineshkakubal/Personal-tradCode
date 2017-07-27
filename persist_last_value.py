@@ -16,16 +16,17 @@ class PersistLastValue:
             self.persist_db.insert(sell_flag=False, buy_flag=False, high_band=0, low_band=0)
             self.persist_db.commit()
 
-    def persist_value(self, previous_hiband=0, previous_loband=0):
-        if previous_loband != 0:
-            record = self.persist_db[0]
-            record['previous_loband'] = previous_loband
+    def persist_value(self, buy_flag=False, sell_flag=False, high_band=0, low_band=0):
+        record = self.persist_db[0]
+        if low_band != 0:
+            record['low_band'] = low_band
             self.persist_db.update(record, __id__=0)
-        if previous_hiband != 0:
-            record = self.persist_db[0]
-            record['previous_hiband'] = previous_hiband
+        if high_band != 0:
+            record['high_band'] = high_band
             self.persist_db.update(record, __id__=0)
-
+        record['buy_flag'] = buy_flag
+        record['sell_flag'] = sell_flag
+        self.persist_db.update(record, __id__=0)
         self.persist_db.commit()
 
     def get_persisted_value(self):

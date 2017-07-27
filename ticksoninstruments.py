@@ -9,8 +9,6 @@ from pydblite.pydblite import Base
 from constants import db_name
 from constants import instruments
 from readinstrument import MyTrade
-now = datetime.datetime.now()
-trade = MyTrade(hour=now.hour, min=now.minute)
 
 api_key = os.getenv("API_KEY")
 token = os.getenv("PUB_TOKEN")
@@ -28,6 +26,7 @@ if db.exists():
 else:
     db.create('time', 'instrument_token', 'last_price', 'mode', 'tradeable')
 
+trade = MyTrade()
 
 
 # Save ticks Data on file.
@@ -39,8 +38,10 @@ def on_tick(tick, ws):
                   mode=each_instrument_tick['mode'],
                   tradeable=each_instrument_tick['tradeable'])
         db.commit()
-        trade.initialization(each_instrument_tick['last_price'])
-        trade.super_trend_decision()
+        now = datetime.datetime.now()
+        trade.initialize_close_price(each_instrument_tick['last_price'])
+        trade.super_trend_decision(now.hour, now.minute)
+    time.sleep(60)
 
 
 # Callback for successful connection.
