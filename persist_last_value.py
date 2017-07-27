@@ -9,11 +9,11 @@ class PersistLastValue:
         if self.persist_db.exists():
             self.persist_db.open()
             if len(self.persist_db) < 1:
-                self.persist_db.insert(previous_hiband=0, previous_loband=0)
+                self.persist_db.insert(sell_flag=False, buy_flag=False, high_band=0, low_band=0)
                 self.persist_db.commit()
         else:
-            self.persist_db.create("previous_hiband", "previous_loband")
-            self.persist_db.insert(previous_hiband=0, previous_loband=0)
+            self.persist_db.create("sell_flag", "buy_flag")
+            self.persist_db.insert(sell_flag=False, buy_flag=False, high_band=0, low_band=0)
             self.persist_db.commit()
 
     def persist_value(self, previous_hiband=0, previous_loband=0):
