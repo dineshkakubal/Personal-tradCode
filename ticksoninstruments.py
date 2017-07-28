@@ -2,7 +2,7 @@
 import os
 import time
 import datetime
-
+import sys
 
 from kiteconnect import WebSocket
 from pydblite.pydblite import Base
@@ -49,6 +49,7 @@ def on_tick(tick, ws):
             trade.initialize_close_price(each_instrument_tick['last_price'])
             trade.super_trend_decision(current_time.hour, current_time.minute)
             persist_last_value.save_object(PREVIOUS_TIME, current_time)
+    sys.stdout.flush()
 
 
 # Callback for successful connection.
