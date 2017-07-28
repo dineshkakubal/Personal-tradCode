@@ -3,12 +3,13 @@ import os
 import time
 import datetime
 
+
 from kiteconnect import WebSocket
 from pydblite.pydblite import Base
 
-from constants import db_name
-from constants import instruments
+from constants import *
 from readinstrument import MyTrade
+import persist_last_value
 
 api_key = os.getenv("API_KEY")
 token = os.getenv("PUB_TOKEN")
@@ -28,6 +29,10 @@ else:
 
 trade = MyTrade()
 
+# Save Initial Time
+now = datetime.datetime.now()
+persist_last_value.save_object(PREVIOUS_TIME, now)
+
 
 # Save ticks Data on file.
 def on_tick(tick, ws):
@@ -38,10 +43,12 @@ def on_tick(tick, ws):
                   mode=each_instrument_tick['mode'],
                   tradeable=each_instrument_tick['tradeable'])
         db.commit()
-        now = datetime.datetime.now()
-        trade.initialize_close_price(each_instrument_tick['last_price'])
-        trade.super_trend_decision(now.hour, now.minute)
-    time.sleep(60)
+        current_time = datetime.datetime.now()
+        previous_time = persist_last_value.retrieve_object(PREVIOUS_TIME)
+        if (current_time - previous_time).total_seconds() >= 60:
+            trade.initialize_close_price(each_instrument_tick['last_price'])
+            trade.super_trend_decision(current_time.hour, current_time.minute)
+            persist_last_value.save_object(PREVIOUS_TIME, current_time)
 
 
 # Callback for successful connection.

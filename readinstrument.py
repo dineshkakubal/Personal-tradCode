@@ -4,8 +4,8 @@ class MyTrade:
         self.c_min = c_min
         self.current_high_band = 0
         self.current_low_band = 0
-        self.sell_flag = False
-        self.buy_flag = False
+        self.sell_flag = "False"
+        self.buy_flag = "False"
         self.current_close = 0
 
     def initialize_close_price(self, close_price):
@@ -24,31 +24,31 @@ class MyTrade:
         if not self.current_high_band:
             self.compute_current_high_band()
 
-        if not (self.sell_flag or self.buy_flag):
+        if self.sell_flag == "False" and self.buy_flag == "False":
             if self.current_close < self.current_low_band:
-                self.sell_flag = True
-                self.sell_flag = False
+                self.sell_flag = "True"
+                self.sell_flag = "False"
                 self.sell_instrument()
                 self.compute_current_high_band()
 
             if self.current_close > self.current_high_band:
-                self.buy_flag = True
-                self.sell_flag = False
+                self.buy_flag = "True"
+                self.sell_flag = "False"
                 self.buy_instrument()
                 self.compute_current_low_band()
 
-        if self.buy_flag:
+        if self.buy_flag == "True":
             if self.current_close < self.current_low_band:
-                self.sell_flag = True
-                self.buy_flag = False
+                self.sell_flag = "True"
+                self.buy_flag = "False"
                 self.sell_instrument()
             else:
                 self.compute_current_low_band()
 
-        if self.sell_flag:
+        if self.sell_flag == "True":
             if self.current_close > self.current_high_band:
-                self.buy_flag = True
-                self.sell_flag = False
+                self.buy_flag = "True"
+                self.sell_flag = "False"
                 self.buy_instrument()
             else:
                 self.compute_current_high_band()
