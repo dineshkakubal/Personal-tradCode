@@ -27,11 +27,15 @@ if db.exists():
 else:
     db.create('time', 'instrument_token', 'last_price', 'mode', 'tradeable')
 
-trade = MyTrade()
+
 
 # Save Initial Time
 now = datetime.datetime.now()
 persist_last_value.save_object(PREVIOUS_TIME, now)
+
+factor = 1
+minutes = 1
+trade = MyTrade(fac=factor, c_min=minutes)
 
 
 # Save ticks Data on file.
@@ -45,7 +49,7 @@ def on_tick(tick, ws):
         db.commit()
         current_time = datetime.datetime.now()
         previous_time = persist_last_value.retrieve_object(PREVIOUS_TIME)
-        if (current_time - previous_time).total_seconds() >= 60:
+        if (current_time - previous_time).total_seconds() >= minutes * 60:
             trade.initialize_close_price(each_instrument_tick['last_price'])
             trade.super_trend_decision(current_time.hour, current_time.minute)
             persist_last_value.save_object(PREVIOUS_TIME, current_time)
