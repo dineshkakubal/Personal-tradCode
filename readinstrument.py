@@ -24,7 +24,7 @@ class MyTrade:
         if not self.current_high_band:
             self.current_high_band = self.compute_current_high_band()
 
-        print "Current Price %s HighBand %s Lowband %s Sell Flag %s Buy Flag %s" % (self.current_close, self.current_high_band, self.current_low_band, self.sell_flag, self.buy_flag)
+        print "Close Price %s" % self.current_close
 
         # Should Enter Only Once
         if self.sell_flag == "False" and self.buy_flag == "False":
@@ -51,6 +51,7 @@ class MyTrade:
                 if self.current_low_band < self.compute_current_low_band():
                     self.current_low_band = self.compute_current_low_band()
                     self.current_high_band = self.compute_current_high_band()
+                    print "Recomputed in BUY High Band %s LowBand %s" % (self.current_high_band, self.current_low_band)
             return
 
         if self.sell_flag == "True":
@@ -62,6 +63,8 @@ class MyTrade:
                 if self.current_high_band > self.compute_current_high_band():
                     self.current_high_band = self.compute_current_high_band()
                     self.current_low_band = self.compute_current_low_band()
+                    print "Recomputed in SELL High Band %s LowBand %s" % (self.current_high_band, self.current_low_band)
+
             return
 
     def sell_instrument(self):
