@@ -50,6 +50,7 @@ class MyTrade:
             else:
                 if self.current_low_band < self.compute_current_low_band():
                     self.current_low_band = self.compute_current_low_band()
+                    self.current_high_band = self.compute_current_high_band()
             return
 
         if self.sell_flag == "True":
@@ -60,6 +61,7 @@ class MyTrade:
             else:
                 if self.current_high_band > self.compute_current_high_band():
                     self.current_high_band = self.compute_current_high_band()
+                    self.current_low_band = self.compute_current_low_band()
             return
 
     def sell_instrument(self):
