@@ -31,7 +31,8 @@ else:
 
 # Save Initial Time
 now = datetime.datetime.now()
-persist_last_value.save_object(PREVIOUS_TIME, now)
+tmp_filename = PREVIOUS_TIME+str(now)
+persist_last_value.save_object(tmp_filename, now)
 
 factor = 1
 minutes = 1
@@ -48,11 +49,11 @@ def on_tick(tick, ws):
                   tradeable=each_instrument_tick['tradeable'])
         db.commit()
         current_time = datetime.datetime.now()
-        previous_time = persist_last_value.retrieve_object(PREVIOUS_TIME)
+        previous_time = persist_last_value.retrieve_object(tmp_filename)
         if (current_time - previous_time).total_seconds() >= minutes * 60:
             trade.initialize_close_price(each_instrument_tick['last_price'])
             trade.super_trend_decision(current_time.hour, current_time.minute)
-            persist_last_value.save_object(PREVIOUS_TIME, current_time)
+            persist_last_value.save_object(tmp_filename, current_time)
     sys.stdout.flush()
 
 
