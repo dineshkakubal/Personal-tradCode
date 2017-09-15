@@ -35,7 +35,7 @@ tmp_filename = PREVIOUS_TIME+str(int(time.time()))
 persist_last_value.save_object(tmp_filename, now)
 
 factor = 1
-minutes = 1
+minutes = 5
 trade = MyTrade(fac=factor, c_min=minutes)
 
 

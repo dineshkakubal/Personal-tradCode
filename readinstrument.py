@@ -7,15 +7,18 @@ class MyTrade:
         self.sell_flag = "False"
         self.buy_flag = "False"
         self.current_close = 0.0
+        from kiteconnect import KiteConnect
+        self.kite = KiteConnect(api_key="lzxojcmp16le5ep8")  # paid app
+        self.kite.set_access_token('n2t00uxcnshlmox3apf0ovxhbjuy1mqi')
 
     def initialize_close_price(self, close_price):
         self.current_close = close_price
 
     def compute_current_high_band(self):
-        return self.current_close + (self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
+        return self.current_close + (self.fac*25)#(self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
 
     def compute_current_low_band(self):
-        return self.current_close - (self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
+        return self.current_close - (self.fac*25)#(self.fac * 0.0005 * self.current_close * pow(self.c_min, 1/2))
 
     def super_trend_decision(self, hour=0, minute=0):
         if not self.current_low_band:
@@ -47,6 +50,7 @@ class MyTrade:
                 self.sell_flag = "True"
                 self.buy_flag = "False"
                 self.sell_instrument()
+                self.sell_instrument()
             else:
                 if self.current_low_band < self.compute_current_low_band():
                     self.current_low_band = self.compute_current_low_band()
@@ -59,6 +63,7 @@ class MyTrade:
                 self.buy_flag = "True"
                 self.sell_flag = "False"
                 self.buy_instrument()
+                self.buy_instrument()
             else:
                 if self.current_high_band > self.compute_current_high_band():
                     self.current_high_band = self.compute_current_high_band()
@@ -68,10 +73,35 @@ class MyTrade:
             return
 
     def sell_instrument(self):
+        try:
+            order_id = self.kite.order_place(tradingsymbol="VEDL",
+                                        exchange="NSE",
+                                        transaction_type="SELL",
+                                        quantity=1,
+                                        order_type="MARKET",
+                                        product="MIS")
+
+            print("Order placed. ID is", order_id)
+        except Exception as e:
+            print("Order placement failed", e.message)
+
         print "SELL @ %s HighBand %s LowBand %s SELL Flag %s Buy Flag %s" % (self.current_close, self.current_high_band, self.current_low_band, self.sell_flag, self.buy_flag)
 
     def buy_instrument(self):
+        try:
+            order_id = self.kite.order_place(tradingsymbol="VEDL",
+                                        exchange="NSE",
+                                        transaction_type="BUY",
+                                        quantity=1,
+                                        order_type="MARKET",
+                                        product="MIS")
+
+            print("Order placed. ID is", order_id)
+        except Exception as e:
+            print("Order placement failed", e.message)
+
         print "BUY @ %s HighBand %s LowBand %s SELL Flag  %s Buy Flag %s" % (self.current_close, self.current_high_band, self.current_low_band,self.sell_flag, self.buy_flag)
+
 
 if __name__ == "__main__":
     trade = MyTrade(220.13, 10, 15)
