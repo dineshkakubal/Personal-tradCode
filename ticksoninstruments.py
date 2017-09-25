@@ -17,7 +17,7 @@ user = os.getenv("USER_ID")
 # Initialise.
 # kws = WebSocket("your_api_key", "your_public_token", "logged_in_user_id")
 # kws = WebSocket(api_key, token, user)
-kws = WebSocket("lzxojcmp16le5ep8", "c0b8c02577a6ec00dd3ddb622aa71c60", "DD1846")
+kws = WebSocket("lzxojcmp16le5ep8", "9dd813876abe0c06dfca066221f5d1da", "DD1846")
 
 # Initialize DB.
 
