@@ -9,7 +9,7 @@ class MyTrade:
         self.current_close = 0.0
         from kiteconnect import KiteConnect
         self.kite = KiteConnect(api_key="lzxojcmp16le5ep8")  # paid app
-        self.kite.set_access_token('n2t00uxcnshlmox3apf0ovxhbjuy1mqi')
+        self.kite.set_access_token('phuz7rw7g3459xjm8z0754n3da4o54yj')
 
     def initialize_close_price(self, close_price):
         self.current_close = close_price
@@ -74,10 +74,10 @@ class MyTrade:
 
     def sell_instrument(self):
         try:
-            order_id = self.kite.order_place(tradingsymbol="VEDL",
-                                        exchange="NSE",
+            order_id = self.kite.order_place(tradingsymbol="BANKNIFTY17SEPFUT",
+                                        exchange="NFO",
                                         transaction_type="SELL",
-                                        quantity=1,
+                                        quantity=40,
                                         order_type="MARKET",
                                         product="MIS")
 
@@ -89,10 +89,10 @@ class MyTrade:
 
     def buy_instrument(self):
         try:
-            order_id = self.kite.order_place(tradingsymbol="VEDL",
-                                        exchange="NSE",
+            order_id = self.kite.order_place(tradingsymbol="BANKNIFTY17SEPFUT",
+                                        exchange="NFO",
                                         transaction_type="BUY",
-                                        quantity=1,
+                                        quantity=40,
                                         order_type="MARKET",
                                         product="MIS")
 
